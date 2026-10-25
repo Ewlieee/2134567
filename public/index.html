@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Книжная полка</title>
+  <meta name="description" content="Каталог книг, личная читательская полка, прогресс чтения и отзывы">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#/" class="logo" aria-label="Книжная полка — на главную">
+        <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
+          <rect x="4" y="6" width="6" height="20" rx="1" fill="currentColor"/>
+          <rect x="12" y="4" width="6" height="22" rx="1" fill="currentColor" opacity=".7"/>
+          <rect x="20" y="8" width="6" height="18" rx="1" transform="rotate(-12 23 17)" fill="currentColor" opacity=".45"/>
+          <rect x="2" y="27" width="28" height="2" rx="1" fill="currentColor"/>
+        </svg>
+        <span>Книжная полка</span>
+      </a>
+      <button class="nav-toggle" aria-label="Меню" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="main-nav" class="main-nav">
+        <a href="#/catalog" data-nav="catalog">Каталог</a>
+        <a href="#/authors" data-nav="authors">Авторы</a>
+        <a href="#/genres" data-nav="genres">Жанры</a>
+        <a href="#/news" data-nav="news">Новости</a>
+        <div class="nav-user" id="nav-user"></div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="app" class="container" tabindex="-1"></main>
+
+  <footer class="site-footer">
+    <div class="container">
+      «Книжная полка» — каталог книг и читательский дневник. Книги не продаются и не распространяются через приложение.
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <dialog id="confirm" class="dialog">
+    <form method="dialog">
+      <p class="confirm-text"></p>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn btn-ghost">Отмена</button>
+        <button value="ok" class="btn btn-danger">Удалить</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

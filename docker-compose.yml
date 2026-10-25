@@ -1,0 +1,50 @@
+# Запуск всего приложения одной командой:  docker compose up --build
+# Пароль и секрет можно переопределить переменными окружения или в файле .env рядом с этим файлом.
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:-BookShelf!Passw0rd}
+      MSSQL_PID: Developer
+    volumes:
+      - mssql-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' -b -o /dev/null"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 15s
+    restart: unless-stopped
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      DB_SERVER: db
+      DB_PORT: 1433
+      DB_NAME: BookShelf
+      DB_USER: sa
+      DB_PASSWORD: ${MSSQL_SA_PASSWORD:-BookShelf!Passw0rd}
+      DB_ENCRYPT: "false"
+      DB_TRUST_CERT: "true"
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    volumes:
+      - uploads:/app/uploads
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:3000/api/auth/me"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  mssql-data:
+  uploads:
